@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+  
+  <meta charset="utf-8">
+  <head>
+
+    <title>Compare - Word University Rankings</title>
+    
+    <!-- Bootstrap - Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Bootstrap - Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- selectize - for the dropdowns -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.default.css">
+    <!-- css for radar chart -->
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+    <link rel="stylesheet" href="https://rawgit.com/tpreusse/radar-chart-d3/master/src/radar-chart.css">
+    <!-- custom css -->
+    <link rel="stylesheet" href="_css/style.css">
+
+  </head>
+
+  <body>
+    <div class="row">
+      <div class="col-md-3" id="logo-container">
+        <a href="https://www.timeshighereducation.com/"><img id="logo" src="/data/logo.png"></a>
+      </div>
+      <div class="col-md-7" id="intro-text">
+        <h1> Universities Comparison Tool - 2016 Rankings</h1>
+      </div>
+    </div>
+    
+    <div class="row" id="dropdown-div">
+      <div class="col-md-3 col-md-offset-3">
+        <select id="dropdown-1" placeholder="Type the name of the University" onchange="getSelectedUniv(this, '#univ-1')">
+            <option value="">Type the name of the University</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select id="dropdown-2" placeholder="Type the name of the University" onchange="getSelectedUniv(this, '#univ-2')">
+          <option value="">Type the name of the University</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" id="main-div">
+      <div class="col-md-3 univ-div" id="univ1-div">
+        <svg width="30" height="30" class="color-div">
+          <rect width="50" height="50" style="fill:#1B998B"></rect>
+        </svg>
+        <h3 id="univ-1">University of California, Berkeley</h3>
+        <table>
+          <tbody id="tbody1"></tbody>
+        </table>
+      </div>
+      <div class="col-md-3" id="chart-container">
+      </div>
+      <div class="univ-div col-md-3 col-md-offset-2" id="univ2-div">
+        <svg width="30" height="30" class="color-div">
+          <rect width="50" height="50" style="fill:#EDAE49"></rect>
+        </svg>
+        <h3 id="univ-2">Stanford University</h3>
+        <table>
+          <tbody id="tbody2"></tbody>
+        </table>
+
+      </div>
+    </div>
+    </body>
+
+
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <!-- d3 -->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <!-- Bootstrap - Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- selectize - for the dropdowns -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
+    <!-- radar chart library -->
+    <!-- <script src="https://rawgit.com/alangrafu/radar-chart-d3/master/src/radar-chart.min.js"></script> -->
+    <script type="text/javascript" src="_js/radar-chart.js"> </script>
+    <!-- custom js -->
+    <script type="text/javascript" src="_js/main.js"> </script>
+
+  </body>
+
+</html>
+

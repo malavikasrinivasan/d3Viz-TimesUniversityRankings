@@ -1,0 +1,71 @@
+#logo-container {
+	padding: 10px;
+	padding-left: 20px;
+}
+#logo {
+	max-width: 100%;
+	max-height: 100%;
+}
+#intro-text {
+	padding-top: 10px;
+    vertical-align: middle;
+}
+
+#main-div {
+	padding-top: 20px;
+	vertical-align: middle;
+}
+#univ-1, #univ-2 {
+	text-align: center;	
+}
+.univ-div {
+	border-style: solid;
+	border-width: 2px;
+}
+#univ1-div {
+	margin-left: 25px;
+	border-color: #1B998B;
+}
+#univ2-div {
+	border-color: #EDAE49;
+}
+.color-div {
+	display: block;
+	margin: auto;
+	margin-top: 10px;
+}
+#chart-container {
+	padding-top: 20px;
+}
+
+.radar-chart .area {
+  fill-opacity: 0.5;
+}
+.radar-chart. .area {
+  fill-opacity: 0.3;
+}
+.radar-chart.focus .area.focused {
+  fill-opacity: 0.9;
+}
+
+.area.univ1, .univ1 .circle {
+  fill: #1B998B;
+  stroke: none;
+}
+
+.area.univ2, .univ2 .circle {
+  fill: #EDAE49;
+  stroke: none;
+}
+h4 {
+	text-align: center;
+}
+h1 {
+	text-align: center;
+	font-size: 220%;
+	color: #27547F;
+}
+td {
+	text-align: right;
+	padding: 3px;
+}
