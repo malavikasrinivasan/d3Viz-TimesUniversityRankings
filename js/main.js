@@ -6,7 +6,7 @@ var univs = [];
 // Reading and manipulating the csv
 
 
-var tst = d3.csv("/data/timesData_2016.csv", function(data) 
+var tst = d3.csv("data/timesData_2016.csv", function(data) 
 	{	
 		
 		data.forEach(function(d) {
