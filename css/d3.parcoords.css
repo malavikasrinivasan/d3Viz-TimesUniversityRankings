@@ -1,4 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,600);
+
+html {
+  zoom: 110%;
+}
+
 body {
   font-size: 12px;
   font-family: "Source Code Pro", Consolas, monaco, monospace;
@@ -41,8 +46,15 @@ ul {
 }
 h5
 {
+  font-size: 12px;
  float: right;  
 }
+
+form
+{
+ align-self: center;
+}
+
 p {
   width: 560px;
 }
@@ -79,7 +91,7 @@ input {
     height: 300px;
     overflow: scroll;
    }
-  .row, .header { clear: left; font-size: 10px; line-height: 24px; height: 24px; }
+  .row, .header { clear: left; font-size: 10px; line-height: 24px; height: 24px; margin-bottom: 0px;}
   .row:nth-child(odd) { background: rgba(0,0,0,0.05); }
   .header { font-weight: bold; }
   .cell { float: left; overflow: hidden; white-space: nowrap; width: 85px; height: 18px; }
