@@ -1,88 +1,122 @@
+<!-- Code referenced from: 
+1. https://github.com/syntagmatic/parallel-coordinates
+2. http://people.ischool.berkeley.edu/~dmenghani/wine-viz_bkp/
+3. https://bl.ocks.org/jasondavies/1341281
+4. http://bl.ocks.org/eesur/1a2514440351ec22f176
+5. https://github.com/d3/d3/wiki
+ -->
+
 <!DOCTYPE html>
   
-  <meta charset="utf-8">
-  <head>
+<meta charset="utf-8">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://syntagmatic.github.io/parallel-coordinates/d3.parcoords.js"></script>
+<script src="js/divgrid.js"></script>
+<script src="js/sylvester.js"></script>
+<script src="js/underscore.js"></script>
+<script src="js/underscore.math.js"></script>
+<link rel="stylesheet" type="text/css" href="css/d3.parcoords.css">
 
-    <title>Compare - Word University Rankings</title>
-    
-    <!-- Bootstrap - Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- Bootstrap - Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <!-- selectize - for the dropdowns -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.default.css">
-    <!-- css for radar chart -->
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
-    <link rel="stylesheet" href="https://rawgit.com/tpreusse/radar-chart-d3/master/src/radar-chart.css">
-    <!-- custom css -->
-    <link rel="stylesheet" href="css/style.css">
-
-  </head>
-
-  <body>
-    <div class="row">
-      <div class="col-md-3" id="logo-container">
-        <a href="https://www.timeshighereducation.com/"><img id="logo" src="/data/logo.png"></a>
-      </div>
-      <div class="col-md-7" id="intro-text">
-        <h1> Universities Comparison Tool - 2016 Rankings</h1>
-      </div>
+<body>
+    <div id = "THElogo">
+      <a href="https://www.timeshighereducation.com/"><img id="logo" src="/data/logo.png"></a>
+      <a id = "Radarlink", href="radar.html">
+        <img id="Radarlogo" src="image/Radar.png"></img>
+        <h5>Compare using Radar Chart</h5>
+      </a>
     </div>
-    
-    <div class="row" id="dropdown-div">
-      <div class="col-md-3 col-md-offset-3">
-        <select id="dropdown-1" placeholder="Type the name of the University" onchange="getSelectedUniv(this, '#univ-1')">
-            <option value="">Type the name of the University</option>
-        </select>
-      </div>
-      <div class="col-md-3">
-        <select id="dropdown-2" placeholder="Type the name of the University" onchange="getSelectedUniv(this, '#univ-2')">
-          <option value="">Type the name of the University</option>
-        </select>
-      </div>
+    <div id="example" class="parcoords" style="width:1000px; height:450px; font-size:12px;">
     </div>
-    <div class="row" id="main-div">
-      <div class="col-md-3 univ-div" id="univ1-div">
-        <svg width="30" height="30" class="color-div">
-          <rect width="50" height="50" style="fill:#1B998B"></rect>
-        </svg>
-        <h3 id="univ-1">University of California, Berkeley</h3>
-        <table>
-          <tbody id="tbody1"></tbody>
-        </table>
-      </div>
-      <div class="col-md-3" id="chart-container">
-      </div>
-      <div class="univ-div col-md-3 col-md-offset-2" id="univ2-div">
-        <svg width="30" height="30" class="color-div">
-          <rect width="50" height="50" style="fill:#EDAE49"></rect>
-        </svg>
-        <h3 id="univ-2">Stanford University</h3>
-        <table>
-          <tbody id="tbody2"></tbody>
-        </table>
+    <div id="grid"></div>
+</body>
 
-      </div>
-    </div>
-    </body>
+<script>
+
+// quantitative colour scale
+var zcolorscale = d3.scale.linear()
+  .domain([-2.5, 2.5])
+  .range(["#7AC143", "#00B0DD"])
+  .interpolate(d3.interpolateLab);
+
+// load csv file and create the chart
+d3.csv('data/timesDataPC_2016.csv', function(data) {
+
+  pc = d3.parcoords()("#example")
+    .data(data)
+    .hideAxis(["University", "Year", "NumStudents"])
+    .smoothness(.2) // To curve the data lines
+    .alpha(0.6)
+    .margin({ top: 15, left: 150, bottom: 12, right: 0 })
+    .alphaOnBrushed(0.2)
+    .mode("queue")  // Effect of data points being populated one by one
+    .rate(10) // Rate of queueing 
+    .render()
+    .reorderable()  // enable reordering
+    .brushMode("1D-axes"); // enable brushing
+
+  // create data table, row hover highlighting
+  pc.svg.style("font-size", "10px");
+  change_color("Rank");
+  
+  // click label to activate coloring
+  pc.svg.selectAll(".dimension")
+    .on("click", change_color)
+    .selectAll(".label")
+    .style("font-size", "12px");
+
+  // update data table on brush event
+  var grid = d3.divgrid();
+  d3.select("#grid")
+    .datum(data.slice(0,9999))
+    .call(grid)
+    .selectAll(".row")
+    .on({
+      "mouseover": function(d) { pc.highlight([d]) },
+      "mouseout": pc.unhighlight
+    });
+
+  pc.on("brush", function(d) {
+    d3.select("#grid")
+      .datum(d.slice(0,9999))
+      .call(grid)
+      .selectAll(".row")
+      .on({
+        "mouseover": function(d) { pc.highlight([d]) },
+        "mouseout": pc.unhighlight
+      });
+  pc.svg.selectAll("text")
+    .style("font", "10px sans-serif");
+  });
+});
+
+// update color 
+function change_color(dimension) { 
+  if(dimension != 'Country'){
+    pc.svg.selectAll(".dimension")
+      .style("font-weight", "normal")
+      .filter(function(d) { return d == dimension; })
+      .style("font-weight", "bold")
+
+    pc.color(zcolor(pc.data(),dimension)).render()
+  }
+}
+
+// return color function based on plot and dimension
+function zcolor(col, dimension) {
+  var z = zscore(_(col).pluck(dimension).map(parseFloat))
+  return function(d) { return zcolorscale(z(d[dimension])) }
+};
+
+// color by zscore
+function zscore(col) {
+  var n = col.length,
+      mean = _(col).mean(),
+      sigma = _(col).stdDeviation();
+  return function(d) {
+    return (d-mean)/sigma;
+  };
+};
 
 
-
-    <!-- jQuery -->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <!-- d3 -->
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <!-- Bootstrap - Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <!-- selectize - for the dropdowns -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
-    <!-- radar chart library -->
-    <!-- <script src="https://rawgit.com/alangrafu/radar-chart-d3/master/src/radar-chart.min.js"></script> -->
-    <script type="text/javascript" src="js/radar-chart.js"> </script>
-    <!-- custom js -->
-    <script type="text/javascript" src="js/main.js"> </script>
-
-  </body>
-
+</script>
 </html>
-

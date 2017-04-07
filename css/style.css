@@ -65,6 +65,10 @@ h1 {
 	font-size: 220%;
 	color: #27547F;
 }
+h5 {
+	text-align: center;
+	vertical-align: middle;
+}
 td {
 	text-align: right;
 	padding: 3px;
