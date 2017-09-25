@@ -1,4 +1,4 @@
-# infoviz-d3
+# Times University Rankings Comparison Tool 
 
 D3 Assignment for Info247 - Information Visualization, Spring 2017
 
